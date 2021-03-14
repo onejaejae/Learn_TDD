@@ -4,7 +4,7 @@
   "description": "___",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "nodemon --exec babel-node server.js"
   },
   "author": "조원제",
@@ -15,6 +15,7 @@
     "@babel/preset-env": "^7.13.10",
     "core-js": "^3.9.1",
     "dotenv": "^8.2.0",
+    "eslint-plugin-jest": "^24.3.1",
     "express": "^4.17.1",
     "mongoose": "^5.12.0",
     "nodemon": "^2.0.7"

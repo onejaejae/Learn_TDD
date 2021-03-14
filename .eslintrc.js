@@ -4,6 +4,7 @@ module.exports = {
     es2021: true,
     node: true,
   },
+
   extends: ["airbnb-base", "plugin:prettier/recommended"],
   parserOptions: {
     ecmaVersion: 12,
@@ -15,5 +16,7 @@ module.exports = {
     "spaced-comment": "off",
     "no-else-return": "off",
     "import/no-cycle": "off",
+    "no-undef": "off",
+    "jest/no-disabled-tests": "off",
   },
 };
