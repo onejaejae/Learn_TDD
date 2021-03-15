@@ -161,13 +161,50 @@ ___
 
 <br>
 
-jest.fn()
+### jest.fn()
 ___
+<br>
 
 ✔ jest.fn() 이란?
 
 Mock 함수를 생성하는 함수이다. mock의 한글 번역을 보면 모의고사 할 때 모의라는 뜻이 있으며, 가짜, 흉내내는 이라는 뜻도 가진다. 이것으로 비추어 볼 때 Mock 함수가 하는 일은 단위 테스트를 작성할 때, 해당 코드가 의존하는 부분을 가짜로 대체하는 일을 해준다.
 
+📌 참고 자료 
+
+https://www.daleseo.com/jest-mock-modules/
+
+https://stackoverflow.com/questions/45195025/what-is-the-difference-between-tobe-and-toequal-in-jest
+
+<br>
+
 ✔ 단위 테스트는 왜 독립적이여야 하는가?
 
 의존적인 부분을 구현하기가 까다로울 경우가 있으며, 의존적인 부분의 상태에 따라서 테스트하고자 하는 부분의 테스트 결과가 영향을 받을 수 있기 때문이다.
+
+<br>
+
+### node-mocks-http
+---
+<br>
+
+🤷‍♂️ 원래 몽구스 모델을 이용해서 데이터를 저장할 때는 Product.create(req.body)와 같이 req 객체를 이용해서 요청에 함께 들어온 body를 create method에 인자로 넣어 데이터베이스에 저장한다.
+
+그래서 단위 테스트에서도 req 객체가 필요하다.
+`그러면 어떻게 이 req 객체를 단위 테스트에서 사용할까?`
+
+<br>
+
+✔ node-mocks-http 모듈 이용❕❕❕
+
+<br>
+
+### beforeEach
+
+___
+
+
+<br>
+
+✔ 여러개의 테스트에 공통된 Code가 있다면 beforeEach 안에 넣어서 반복을 줄여줄 수 있다.  
+
+

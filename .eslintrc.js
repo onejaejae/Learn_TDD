@@ -18,5 +18,6 @@ module.exports = {
     "import/no-cycle": "off",
     "no-undef": "off",
     "jest/no-disabled-tests": "off",
+    "no-underscore-dangle": "off",
   },
 };
