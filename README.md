@@ -207,4 +207,61 @@ ___
 
 ✔ 여러개의 테스트에 공통된 Code가 있다면 beforeEach 안에 넣어서 반복을 줄여줄 수 있다.  
 
+<br>
 
+### postman
+___
+
+<br>
+
+Postman은 개발한 API를 테스트하고, 테스트 결과를 공유하여 API 개발의 생산성을 높여주는 플랫폼이다.
+현재 API에 요청을 전달하는 클라이언트가 없기 때문에 포스트맨을 사용해서 요청을 임의로 전달하자.
+
+<br>
+
+### 에러 처리를 위한 단위 테스트 작성
+___
+<br>
+
+```js
+  it("should handle errors", async () => {
+    const errorMessage = { message: "description property missing" };
+    const rejectedPromise = Promise.reject(errorMessage);
+    Product.create.mockReturnValue(rejectedPromise);
+    await createProduct(req, res, next);
+    expect(next).tobeCalledWith(errorMessage);
+  });
+```
+
+<br>
+
+
+```js
+it("should handle errors", async () => {
+    const errorMessage = { message: "description property missing" };
+    const rejectedPromise = Promise.reject(errorMessage);
+    Product.create.mockReturnValue(rejectedPromise);
+```
+<br>
+
+✔ 몽고 디비에서 처리하는 부분은 문제가 없다는 것을 가정하는 단위 테스트이기 때문에 원래 몽고 디비에서 처리하는 에러 메시지 부분은 Mock 함수를 이용해서 처리하는 부분이다.
+
+<br>
+
+```js
+ const rejectedPromise = Promise.reject(errorMessage);
+```
+
+<br>
+
+✔ 비동기 요청에 대한 결과값은 성공할 때는 Promise.resolve(value) 에러일 때는 Promise.reject(reason)
+
+✔ 비동기 요청 (Async Request)
+
+-   성공
+
+    - resolve 메소드 실행 -> resolve 메소드 인자 값은 then 메소드를 통해서 처리 가능
+
+-   에러
+
+    -   reject 메소드 실행 reject(reason)

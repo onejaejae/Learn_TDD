@@ -12,10 +12,10 @@ let next;
 
 // 중복 제거
 beforeEach(() => {
-  // httpMocks를 이용해서 req, res 객체 할당
+  // node-mocks-http를 이용해서 req, res 객체 할당
   req = httpMocks.createRequest();
   res = httpMocks.createResponse();
-  next = null;
+  next = jest.fn();
 });
 
 describe("Product Controller Create", () => {
@@ -27,26 +27,34 @@ describe("Product Controller Create", () => {
     expect(typeof createProduct).toBe("function");
   });
 
-  it("should call ProductModel.create", () => {
+  it("should call ProductModel.create", async () => {
     // createProduct가 호출이 될때, Product model의 create method가 호출이 되는지
-    createProduct(req, res, next);
+    await createProduct(req, res, next);
     expect(Product.create).toBeCalledWith(newProduct);
   });
 
-  it("should return 201 response code", () => {
-    createProduct(req, res, next);
+  it("should return 201 response code", async () => {
+    await createProduct(req, res, next);
     expect(res.statusCode).toBe(201);
-    // _isEndCalled(node-mocks-http 제공) req.send()가 있는지
+    // _isEndCalled(node-mocks-http 제공)
     expect(res._isEndCalled()).toBeTruthy();
   });
 
-  it("should return json body response", () => {
+  it("should return json body response", async () => {
     // mongoose는 정상적으로 작동된다고 가정 => Product.create = jest.fn();
     // mockReturnValue를 사용해서 return 값을 임의로 지정해줌
     // Product.create method를 실행했을 때 return 되는 값은 newProduct이다.
     Product.create.mockReturnValue(newProduct);
-    createProduct(req, res, next);
+    await createProduct(req, res, next);
     // _getJSONData(node-mocks-http 제공)
     expect(res._getJSONData()).toStrictEqual(newProduct);
+  });
+
+  it("should handle errors", async () => {
+    const errorMessage = { message: "description property missing" };
+    const rejectedPromise = Promise.reject(errorMessage);
+    Product.create.mockReturnValue(rejectedPromise);
+    await createProduct(req, res, next);
+    expect(next).toBeCalledWith(errorMessage);
   });
 });

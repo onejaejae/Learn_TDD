@@ -18,7 +18,7 @@ mongoose
   .catch((err) => console.log(err));
 
 app.use(express.json());
-app.use("/api/product", productRouter);
+app.use("/api/products", productRouter);
 
 app.get("/", (req, res) => {
   res.send("반갑습니다");
