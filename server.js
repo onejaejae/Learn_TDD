@@ -24,4 +24,10 @@ app.get("/", (req, res) => {
   res.send("반갑습니다");
 });
 
+app.use((err, req, res, next) => {
+  res.status(500).json({ message: err.message });
+});
+
 app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+
+export default app;

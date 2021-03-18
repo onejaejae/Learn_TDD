@@ -15,6 +15,8 @@ beforeEach(() => {
   // node-mocks-http를 이용해서 req, res 객체 할당
   req = httpMocks.createRequest();
   res = httpMocks.createResponse();
+
+  // mock 함수를 사용해 next를 추적할 수 있게 만듬
   next = jest.fn();
 });
 
@@ -27,7 +29,7 @@ describe("Product Controller Create", () => {
     expect(typeof createProduct).toBe("function");
   });
 
-  it("should call ProductModel.create", async () => {
+  it("should call Product.create", async () => {
     // createProduct가 호출이 될때, Product model의 create method가 호출이 되는지
     await createProduct(req, res, next);
     expect(Product.create).toBeCalledWith(newProduct);
