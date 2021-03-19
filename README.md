@@ -298,3 +298,13 @@ ___
 
 nodejs http 서버를 테스트하기 위해 만들어진 모듈이다.
 supertest 모듈을 이용해서 통합 테스트를 쉽게 구현할 수 있다.
+
+<br>
+
+✔ toBeDefined
+
+- 변수가 undefined가 아닌지 체크한다.
+
+✔ toBeTruthy
+
+- value 값이 무엇인지보다 value가 True인지 아닌지를 확인한다.
