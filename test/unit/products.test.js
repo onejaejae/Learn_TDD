@@ -4,6 +4,7 @@ import {
   getProducts,
   getProductById,
   updateProduct,
+  deleteProduct,
 } from "../../controllers/product";
 import Product from "../../models/Product";
 
@@ -15,6 +16,7 @@ Product.create = jest.fn();
 Product.find = jest.fn();
 Product.findById = jest.fn();
 Product.findByIdAndUpdate = jest.fn();
+Product.findByIdAndDelete = jest.fn();
 
 let req;
 let res;
@@ -194,6 +196,46 @@ describe("Product Controller Update", () => {
   });
 });
 
-descripbe("Product Controller Delete", () => {
-  it("should have a deleteProduct function", () => {});
+describe("Product Controller Delete", () => {
+  it("should have a deleteProduct function", () => {
+    expect(typeof deleteProduct).toBe("function");
+  });
+
+  it("should call Product.findByIdAndDelete", async () => {
+    req.params.productId = productId;
+
+    await deleteProduct(req, res, next);
+    expect(Product.findByIdAndDelete).toHaveBeenCalledWith(productId);
+  });
+
+  it("should return 200 code", async () => {
+    const deletedProduct = {
+      name: "deletedProduct",
+      description: "It is deleted",
+    };
+    req.params.productId = productId;
+    Product.findByIdAndDelete.mockReturnValue(deletedProduct);
+
+    await deleteProduct(req, res, next);
+    expect(res.statusCode).toBe(200);
+    expect(res._isEndCalled()).toBeTruthy();
+    expect(res._getJSONData()).toStrictEqual(deletedProduct);
+  });
+
+  it("should handel 404 when item doesnt exist", async () => {
+    Product.findByIdAndDelete.mockReturnValue(null);
+
+    await deleteProduct(req, res, next);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  it("should handle errors", async () => {
+    const errorMessage = { message: "Error" };
+    const rejectedPromise = Promise.reject(errorMessage);
+    Product.findByIdAndDelete.mockReturnValue(rejectedPromise);
+
+    await deleteProduct(req, res, next);
+    expect(next).toHaveBeenCalledWith(errorMessage);
+  });
 });

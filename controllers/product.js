@@ -46,8 +46,23 @@ export const updateProduct = async (req, res, next) => {
     if (newProduct) {
       res.status(200).json(newProduct);
     } else {
-      console.log("호출됨");
       res.status(404).send();
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteProduct = async (req, res, next) => {
+  try {
+    const deletedProduct = await Product.findByIdAndDelete(
+      req.params.productId
+    );
+
+    if (deletedProduct) {
+      res.status(200).json(deletedProduct);
+    } else {
+      res.status(404).end();
     }
   } catch (error) {
     next(error);

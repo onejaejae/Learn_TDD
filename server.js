@@ -25,7 +25,6 @@ app.get("/", (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.log("호출됨 2");
   res.status(500).json({ message: err.message });
 });
 

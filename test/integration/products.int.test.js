@@ -57,3 +57,9 @@ it("PUT /api/products/:productId", async () => {
   expect(res.body.name).toBe(updatedProduct.name);
   expect(res.body.description).toBe(updatedProduct.description);
 });
+
+it("DELETE /api/products/:productId", async () => {
+  const res = await request(app).delete(`/api/products/${firstProduct._id}`);
+
+  expect(res.statusCode).toBe(200);
+});
