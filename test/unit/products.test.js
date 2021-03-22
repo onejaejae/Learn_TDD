@@ -3,6 +3,7 @@ import {
   createProduct,
   getProducts,
   getProductById,
+  updateProduct,
 } from "../../controllers/product";
 import Product from "../../models/Product";
 
@@ -13,12 +14,17 @@ import allProduct from "../data/all-Product.json";
 Product.create = jest.fn();
 Product.find = jest.fn();
 Product.findById = jest.fn();
+Product.findByIdAndUpdate = jest.fn();
 
 let req;
 let res;
 let next;
 
 const productId = "12asdsdv";
+const updatedProduct = {
+  name: "updated name",
+  description: "updated description",
+};
 
 // 중복 제거
 beforeEach(() => {
@@ -138,4 +144,56 @@ describe("Product Controller GetById", () => {
     await getProductById(req, res, next);
     expect(next).toHaveBeenCalledWith(errorMessage);
   });
+});
+
+describe("Product Controller Update", () => {
+  it("should have an updateProduct", () => {
+    expect(typeof updateProduct).toBe("function");
+  });
+
+  it("should call updateProduct.findByIdAndUpdate", async () => {
+    req.params.productId = productId;
+    req.body = updatedProduct;
+
+    await updateProduct(req, res, next);
+    expect(Product.findByIdAndUpdate).toHaveBeenCalledWith(
+      productId,
+      updatedProduct,
+      {
+        new: true,
+      }
+    );
+  });
+
+  it("should return json body and response code 200", async () => {
+    req.params.productId = productId;
+    req.body = updatedProduct;
+    Product.findByIdAndUpdate.mockReturnValue(updatedProduct);
+
+    await updateProduct(req, res, next);
+    expect(res._isEndCalled()).toBeTruthy();
+    expect(res.statusCode).toBe(200);
+    expect(res._getJSONData()).toStrictEqual(updatedProduct);
+  });
+
+  it("should handle 404 when item doesnt exist", async () => {
+    Product.findByIdAndUpdate.mockReturnValue(null);
+
+    await updateProduct(req, res, next);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+
+  it("should handle errors", async () => {
+    const errorMessage = { message: "Error" };
+    const rejectedPromise = Promise.reject(errorMessage);
+    Product.findByIdAndUpdate.mockReturnValue(rejectedPromise);
+
+    await updateProduct(req, res, next);
+    expect(next).toBeCalledWith(errorMessage);
+  });
+});
+
+descripbe("Product Controller Delete", () => {
+  it("should have a deleteProduct function", () => {});
 });

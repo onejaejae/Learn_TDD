@@ -3,6 +3,10 @@ import app from "../../server";
 import newProduct from "../data/new-Product.json";
 
 let firstProduct;
+const updatedProduct = {
+  name: "updated name",
+  description: "updated description",
+};
 
 it("POST /api/products", async () => {
   const res = await request(app).post("/api/products").send(newProduct);
@@ -42,4 +46,14 @@ it("GET /api/products/:productId", async () => {
   expect(res.statusCode).toBe(200);
   expect(res.body.name).toBe(firstProduct.name);
   expect(res.body.description).toBe(firstProduct.description);
+});
+
+it("PUT /api/products/:productId", async () => {
+  const res = await request(app)
+    .put(`/api/products/${firstProduct._id}`)
+    .send(updatedProduct);
+
+  expect(res.statusCode).toBe(200);
+  expect(res.body.name).toBe(updatedProduct.name);
+  expect(res.body.description).toBe(updatedProduct.description);
 });
